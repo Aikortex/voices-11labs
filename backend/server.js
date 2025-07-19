@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
-const { Pool } = require('pg');
 const fetch = require('node-fetch');
+const { Pool } = require('pg');
 const dns = require('dns');
 
 dotenv.config();
@@ -15,16 +15,19 @@ app.use('/static', express.static(path.join(__dirname, '../dist')));
 
 // Conexão com o banco de dados
 const db = new Pool({
-    host: process.env.DB_HOST,        // continua com o hostname do Supabase
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    port: 5432,
-    ssl: { rejectUnauthorized: false },
-    // 🔧 força resolução como IPv4
-    lookup: (hostname, options, callback) => {
-        dns.lookup(hostname, { family: 4 }, callback);
-    }
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  port: 5432,
+  ssl: { rejectUnauthorized: false },
+  // Força resolução via IPv4 no Railway
+  lookup: (hostname, options, callback) => {
+    dns.lookup(hostname, { family: 4 }, (err, address, family) => {
+      console.log(`🔍 Resolvendo ${hostname} para IPv${family}: ${address}`);
+      callback(err, address, family);
+    });
+  }
 });
 
 // Rota dinâmica para acessar assistente por slug
