@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const { Pool } = require('pg');
 const fetch = require('node-fetch');
+const dns = require('dns');
 
 dotenv.config();
 
@@ -14,12 +15,16 @@ app.use('/static', express.static(path.join(__dirname, '../dist')));
 
 // Conexão com o banco de dados
 const db = new Pool({
-    host: process.env.DB_HOST,
+    host: process.env.DB_HOST,        // continua com o hostname do Supabase
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
-    port: 5432, // porta padrão do PostgreSQL
-    ssl: { rejectUnauthorized: false } // necessário para Supabase
+    port: 5432,
+    ssl: { rejectUnauthorized: false },
+    // 🔧 força resolução como IPv4
+    lookup: (hostname, options, callback) => {
+        dns.lookup(hostname, { family: 4 }, callback);
+    }
 });
 
 // Rota dinâmica para acessar assistente por slug
