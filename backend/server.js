@@ -19,15 +19,8 @@ const db = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  port: 5432,
-  ssl: { rejectUnauthorized: false },
-  // Força resolução via IPv4 no Railway
-  lookup: (hostname, options, callback) => {
-    dns.lookup(hostname, { family: 4 }, (err, address, family) => {
-      console.log(`🔍 Resolvendo ${hostname} para IPv${family}: ${address}`);
-      callback(err, address, family);
-    });
-  }
+  port: process.env.DB_PORT || 5432,
+  ssl: { rejectUnauthorized: false }
 });
 
 // Rota dinâmica para acessar assistente por slug
