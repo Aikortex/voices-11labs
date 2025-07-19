@@ -1,36 +1,120 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Montserrat", serif;
     margin: 0;
-    padding: 20px;
-     background: rgb(0,0,0);
-    background: linear-gradient(133deg, rgba(0,0,0,1) 0%, rgba(38,4,105,1) 100%);
+    padding: 0;
+    background: rgb(0,0,0);
+    background-image: url(https://techalliance.com.br/avatar/back-expo.png);
+    background-size: cover; /* Ajusta o tamanho da imagem para cobrir o fundo */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita repetição */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /*background-color: #000000cc;
+    backdrop-filter: blur(1px);*/
+    z-index: -1; /* Coloca atrás do conteúdo */
+}
+.container {
+    border-radius: 20px;
+    width: 350px;
+    padding: 30px 20px;
+    text-align: center;
+    color: #fff;
+    height: 90vh;
 }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.titulos{
+    height: 10% !important;
 }
 
 h1 {
-    text-align: center;
-    color: #333;
+    font-size: 26px;
+    margin-bottom: -15px;
 }
+h2 {
+    font-size: 19px;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.avatar_image {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 3;
+}
+
+.avatar_container {
+    position: relative;
+    height: 45% !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Efeito de ondas pulsando atrás do avatar */
+
+.pulse-blur {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(0, 200, 81, 0.6);
+    border-radius: 50%;
+    animation: pulse-blur 1.7s ease-in-out alternate infinite;
+    transform: translate(-50%, -50%);
+    margin-top: -11px;
+    display: none;
+    z-index: 2; 
+}
+
+@keyframes pulse-blur {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: blur(0);
+        box-shadow: 0 0 10px 10px rgba(0, 200, 81, 0.5);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.3);
+        filter: blur(10px);
+        box-shadow: 0 0 40px 20px rgba(0, 200, 81, 0.3);
+    }
+}
+
+
+
 
 .status-container {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+#speakingStatus{
+    display: none;
 }
 
 .status, .speaking-status {
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 14px;
+    padding: 6px 13px;
+    border-radius: 25px;
+    font-size: 12px;
+    text-align: center;
+    width: 90px;
 }
 
 .status {
@@ -44,6 +128,7 @@ h1 {
 
 .speaking-status {
     background-color: #eee;
+    color: #333;
 }
 
 .speaking-status.speaking {
@@ -53,19 +138,21 @@ h1 {
 
 .controls {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    justify-content: center;
+    gap: 20px;
     align-items: center;
-    margin-bottom: 20px;
 }
 
 .button {
-    padding: 10px 20px;
+    padding: 15px;
     border: none;
-    border-radius: 5px;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 20px;
     transition: background-color 0.3s;
+    width: 70px;
+    height: 70px;
+    margin: 30px;
 }
 
 .button:disabled {
@@ -81,4 +168,17 @@ h1 {
 #endButton {
     background-color: #ff4444;
     color: white;
+}
+
+/* Icons for the buttons */
+#startButton::before {
+    content: "\f095"; /* Phone icon */
+    font-family: 'FontAwesome';
+    font-size: 28px;
+}
+
+#endButton::before {
+    content: "\f3dd"; /* Times icon (X) */
+    font-family: 'FontAwesome';
+    font-size: 28px;
 }

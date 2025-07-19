@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
-const mysql = require('mysql2/promise');
+const { Pool } = require('pg');
 const fetch = require('node-fetch');
 
 dotenv.config();
@@ -13,11 +13,13 @@ app.use(express.json());
 app.use('/static', express.static(path.join(__dirname, '../dist')));
 
 // Conexão com o banco de dados
-const db = mysql.createPool({
+const db = new Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
+    port: 5432, // porta padrão do PostgreSQL
+    ssl: { rejectUnauthorized: false } // necessário para Supabase
 });
 
 // Rota dinâmica para acessar assistente por slug
@@ -26,7 +28,7 @@ app.get('/api/assistente/:slug', async (req, res) => {
     console.log(`🔍 Buscando assistente com slug: ${slug}`);
 
     try {
-        const [rows] = await db.query('SELECT * FROM assistentes WHERE slug = ?', [slug]);
+        const { rows } = await db.query('SELECT * FROM assistentes WHERE slug = $1', [slug]);
         console.log('📦 Resultado da query:', rows);
 
         if (rows.length === 0) {
